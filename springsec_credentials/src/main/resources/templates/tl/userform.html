@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorator="layout">
+<head>
+<title>Users : Create</title>
+</head>
+<body>
+    <h1 layout:fragment="header">Users : Create</h1>
+    <div layout:fragment="content" class="container">
+        <form id="userForm" th:action="@{/user/(form)}" th:object="${user}" action="#" method="post">
+            <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
+                <p th:each="error : ${#fields.errors('*')}" th:text="${error}">Validation error</p>
+            </div>
+<!--             <h4 class="page-header" data-th-text="User identity">User identity</h4> -->
+            <input type="hidden" th:field="*{id}" th:class="${#fields.hasErrors('id')} ? 'field-error'" />
+            <label for="username">Username</label>
+            <input type="text" th:field="*{username}" th:class="${#fields.hasErrors('username')} ? 'field-error'" />
+            <label for="email">Email</label>
+            <input type="email" th:field="*{email}" th:class="${#fields.hasErrors('email')} ? 'field-error'" />
+            <label for="password">Password</label>
+            <input type="password" th:field="*{password}" th:class="${#fields.hasErrors('password')} ? 'field-error'" />
+            <label for="passwordConfirmation">Password Confirmation</label>
+            <input type="password" th:field="*{passwordConfirmation}" th:class="${#fields.hasErrors('passwordConfirmation')} ? 'field-error'" />
+
+            <label for="enabled">Enabled</label>
+            <input type="checkbox" th:field="*{enabled}" th:value="${enabled}" ></input>
+
+			<br></br><br></br>
+            <label> Roles</label>
+            
+         	<div class="row">
+            	<ul>
+              	<li th:each="rol : ${allRoles} ">
+              		<label data-th-text="${rol.name}"> Role</label>
+              			<div>
+              				<input type="checkbox" th:field="*{roles}" th:value="${rol.id}"></input>
+              			</div>              	
+					<br> </br>
+              	</li>
+            	</ul>
+          	</div>
+            <div class="form-actions">
+                <input type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

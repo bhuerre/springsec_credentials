@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+<title>Layout</title>
+ 	<link type="text/css" rel="stylesheet" th:href="@{/css/bootstrap-2.3.2.min.css}" href="/css/bootstrap-2.3.2.min.css" />
+</head>
+<body>
+	<!-- Added below -->
+	<div class="alert alert-success" th:if="${globalMessage}" th:text="${globalMessage}">Some Success message</div>
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="/" sec:authorize="hasRole('ROLE_ADMIN')"> Admins Home </a>
+		        <a class="brand" href="/" sec:authorize="hasRole('ROLE_USER')"> Users Home </a>
+<!--                 <a class="brand" href="/" sec:authorize="hasRole('ROLE_ADMIN')"> Admins Home </a> -->
+<!-- 		        <a class="brand" href="/" sec:authorize="hasRole('ROLE_USER')"> Users Home </a> -->
+<!--                 <a class="brand" href="/"> Home </a> -->
+                <ul class="nav">
+                    <li><a th:href="@{/user/}" href="users.html"> Users </a></li>
+                    <li><a th:href="@{/role/}" href="roles.html"> Roles </a></li>
+                    <li><a th:href="@{/privilege/}" href="privileges.html"> Privileges </a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a th:href="@{/profile}" class="menu-right" > Hi, <span sec:authentication="principal.username">Bob</span> </a></li>                
+                    <li><a th:href="@{/secured}" class="menu-right" sec:authorize="hasRole('ADMIN')">Secured</a></li>
+                    <li><a th:href="@{/asyncbean}" class="menu-right" >AsyncBean</a></li>                
+                    <li><a th:href="@{/logout}" class="menu-right" > Logout </a></li>
+                </ul>
+            </div>
+        </div>
+        <h4 layout:fragment="header">Layout</h4>
+        <div layout:fragment="content">Some content</div>
+    </div>
+</body>
+</html>

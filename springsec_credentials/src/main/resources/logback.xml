@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- logger name="org.springframework" level="DEBUG"/-->
+		<logger name="com.ixtechsol.sec.security.LssUserDetailsService" level="DEBUG" />
+    	<logger name="com.ixtechsol.sec.web.controller" level="DEBUG" />
+    	<logger name="com.ixtechsol.sec.service" level="DEBUG" />
+		<logger name="com.ixtechsol" level="INFO" />
+    	<logger name="java" level="INFO" />
+		<logger name="javax" level="INFO" />
+		<logger name="org.hibernate" level="INFO" />
+		<logger name="org.springframework" level="INFO" />
+		<logger name="org.apache" level="INFO" />
+		<logger name="sun.rmi" level="INFO" />
+		<logger name="org.springframework.security" level="INFO" />
+		
+</configuration>
