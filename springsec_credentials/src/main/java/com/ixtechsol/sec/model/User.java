@@ -48,8 +48,8 @@ public class User {
 
     @NotNull(message = "{error.user.password.null}")
     @NotEmpty(message = "{error.user.password.empty}")
-    @Size(max = 50, message = "{error.user.password.max}")
-    @Column(name = "password", length = 50)
+    @Size(max = 255, message = "{error.user.password.max}")
+    @Column(name = "password", length = 255)
     private String password;
 
     @Transient
