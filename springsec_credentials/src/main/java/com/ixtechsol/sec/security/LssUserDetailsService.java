@@ -39,7 +39,6 @@ public class LssUserDetailsService implements UserDetailsService {
         	Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRoles());
         	
         }
-        // Define userdetails from user attributes
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, getAuthorities(user.getRoles()));
     }
     
