@@ -101,13 +101,19 @@ public class CustSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/savePassword*",
                         "/profile",
                         "/asyncbean",
-                        "/role*",
                         "/js/**",
                         "/css/**",
                         "/public/**",
                         "/").permitAll()
-
-                .anyRequest().permitAll()
+         .antMatchers(
+        		 		"/user",
+        		 		"/user/",
+        				"/user/list",
+        				"/role*",
+        				"/privileges*"
+        		).authenticated()
+                        
+//                .anyRequest().permitAll()
 
         .and()
         .formLogin().
