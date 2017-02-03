@@ -18,7 +18,7 @@ import com.ixtechsol.sec.validation.RoleNotFoundException;
 public class RoleCreate {
 	Logger logger = LoggerFactory.getLogger(RoleCreate.class);
 	
-	private static final String USER_ROLE = "USER1";
+	private static final String USER_ROLE = "USER";
     
 	@Autowired
 	IRoleService roleService;
@@ -27,11 +27,11 @@ public class RoleCreate {
 	public void whenCreateRole_thenSuccess() throws RoleExistsException,RoleNotFoundException{
 		logger.info("\n");
 		logger.info("IN whenCreateRole_thenSuccess()");
-		Role role = roleService.findRoleByName(USER_ROLE);
-		if (role != null ) {
-			roleService.deleteRole(role);
+		if (roleService.findRoleByName(USER_ROLE) != null ) {
+			roleService.deleteRole(roleService.findRoleByName(USER_ROLE));
 			logger.info("\tDelete role {}",USER_ROLE);
 		} 
+		Role role = new Role(); 
 		role.setName(USER_ROLE);
 		roleService.registerNewRole(role);
 		logger.info("OUT whenCreateRole_thenSuccess()");

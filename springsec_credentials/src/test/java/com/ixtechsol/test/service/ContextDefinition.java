@@ -16,7 +16,7 @@ import com.ixtechsol.sec.spring.CustCredentialsApp;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringApplicationConfiguration(CustCredentialsApp.class)
-//@WebAppConfiguration
+@WebAppConfiguration
 @IntegrationTest({
 	"server.port=8082",
 	"spring.jpa.hibernate.ddl-auto=create",
