@@ -11,13 +11,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.ixtechsol.sec.model.Role;
 import com.ixtechsol.sec.service.IRoleService;
 import com.ixtechsol.sec.validation.RoleExistsException;
+import com.ixtechsol.sec.validation.RoleNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextDefinition
 public class RoleCreate {
 	Logger logger = LoggerFactory.getLogger(RoleCreate.class);
 	
-	private static final String USER_ROLE = "USER";
+	private static final String USER_ROLE = "USER1";
     
 	@Autowired
 	IRoleService roleService;
