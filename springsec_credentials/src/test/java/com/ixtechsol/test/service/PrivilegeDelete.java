@@ -64,10 +64,9 @@ public class PrivilegeDelete {
 			privilege.setRoles(roles);
 			privilegeService.addPrivilege(privilege);
 			logger.info("\tPrivilege created {}",privilege);
+			privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
+			logger.info("Privilege confirmed created");
 		}
-		privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
-		logger.info("Privilege confirmed created");
-		
 		privilegeService.deletePrivilege(privilege.getId());
 		logger.info("Delete privilege {}", privilege.getName());
 		roleService.deleteRole(role);
