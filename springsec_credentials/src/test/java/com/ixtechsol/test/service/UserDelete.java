@@ -1,6 +1,9 @@
 package com.ixtechsol.test.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ixtechsol.sec.model.Privilege;
 import com.ixtechsol.sec.model.Role;
@@ -50,33 +54,36 @@ public class UserDelete {
 	IUserService userService;
 
 	@Test
+	//@Transactional
 	public void whenDeleteUser_thenSuccess() throws PrivilegeExistsException, RoleExistsException{
 		logger.info("\n");
 		logger.info("IN whenDeleteeUser_thenSuccess()");
-		Role role = roleService.findRoleByName(USER_ROLE);
-		Set<Role> roles = new HashSet<Role>();
-		if (role == null) {
-			role = new Role(USER_ROLE);
-			roleService.registerNewRole(role);
-			logger.info("\tRole created {}",role);
-		}
-		roles.add(role);
+		User user = new User();
 		
-		User user = new User(USER_NAME,USER_EMAIL,USER_PASS,true);
-		user.setRoles(roles);
-		userService.saveRegisteredUser(user);
-		logger.info("\tUser {} created",user.getUsername());
-		if (userService.findUserByUsername(USER_NAME).getUsername()==user.getUsername()) {
-			logger.info("\tUser {} retrieved",user.getUsername());
-			userService.deleteUser(user);
-			if (userService.findUserByUsername(USER_NAME).getUsername().length()>0) {
-				logger.error("\tUser {} failed to be deleted.",USER_NAME);
-			} else {
-				logger.info("\tUser {} deleted",USER_NAME);
+		if (userService.findUserByUsername(USER_NAME) == null) {
+			user.setUsername(USER_NAME);
+			user.setEmail(USER_EMAIL);
+			user.setPassword(USER_PASS);
+			user.setEnabled(true);
+			if (roleService.findRoleByName(USER_ROLE) == null) {
+				roleService.registerNewRole(new Role(USER_ROLE));
 			}
-			roleService.deleteRole(role);
+			Role role = new Role();
+			role = roleService.findRoleByName(USER_ROLE);
+			Set<Role> roles = new HashSet<Role>();
+			roles.add(role);
+			user.setRoles(roles);
+			userService.saveRegisteredUser(user);
+			logger.info("\tUser {} created",USER_NAME);			
+		}
+		
+		user = userService.findUserByUsername(USER_NAME);
+		userService.deleteUser(user);
+		logger.info("\tUser {} deleted",USER_NAME);
+		if (roleService.findRoleByName(USER_ROLE) != null) {
+			roleService.deleteRole(roleService.findRoleByName(USER_ROLE));
 			logger.info("\tRole {} deleted",USER_ROLE);
-		};
+		}
 		logger.info("OUT whenDeleteUser_thenSuccess()\n");
 	};	
 }
