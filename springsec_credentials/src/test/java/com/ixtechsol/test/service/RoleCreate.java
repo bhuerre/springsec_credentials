@@ -24,11 +24,16 @@ public class RoleCreate {
 	IRoleService roleService;
 	
 	@Test
-	public void whenCreateRole_thenSuccess() throws RoleExistsException{
+	public void whenCreateRole_thenSuccess() throws RoleExistsException,RoleNotFoundException{
 		logger.info("\n");
 		logger.info("IN whenCreateRole_thenSuccess()");
-		Role role = new Role(USER_ROLE);
+		Role role = roleService.findRoleByName(USER_ROLE);
+		if (role != null ) {
+			roleService.deleteRole(role);
+			logger.info("\tDelete role {}",USER_ROLE);
+		} 
+		role.setName(USER_ROLE);
 		roleService.registerNewRole(role);
-		System.out.println(roleService.findRoleByName(USER_ROLE).equals(role));
+		logger.info("OUT whenCreateRole_thenSuccess()");
 	};
 }
