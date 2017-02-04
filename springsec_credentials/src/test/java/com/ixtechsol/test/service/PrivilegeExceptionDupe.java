@@ -35,9 +35,9 @@ import com.ixtechsol.sec.validation.RoleExistsException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextDefinition
-public class PrivilegeCreate {
+public class PrivilegeExceptionDupe {
 	
-	Logger logger = LoggerFactory.getLogger(PrivilegeCreate.class);
+	Logger logger = LoggerFactory.getLogger(PrivilegeExceptionDupe.class);
 	
 	private static final String USER_ROLE = "USER";
 	private static final String USER_PRIVILEGE = "CTRL_READ";
@@ -51,33 +51,22 @@ public class PrivilegeCreate {
 	@Test
 	@Transactional
 	@Rollback
-	public void whenCreatePrivilege_thenSuccess() throws PrivilegeExistsException, RoleExistsException, PrivilegeNotFoundException{
+	public void whenPrivilegeExceptionDupe_thenSuccess() throws PrivilegeExistsException, RoleExistsException, PrivilegeNotFoundException{
 		logger.info("\n");
-		logger.info("IN whenCreatePrivilege_thenSuccess()");
+		logger.info("IN whenPrivilegeExceptionDupe_thenSuccess()");
 		
 		Privilege privilege = new Privilege();
-		privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
-		if (privilege != null) {
-			privilegeService.deletePrivilege(privilegeService.findPrivilegeByName(USER_PRIVILEGE));
-		};
-
-		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE) == null);
 		privilege = new Privilege(USER_PRIVILEGE);
-
-		Role role = roleService.findRoleByName(USER_ROLE);
-		Set<Role> roles = new HashSet<Role>();
-		if (role == null) {
-			role = new Role(USER_ROLE);
-			roleService.registerNewRole(role);
-			logger.info("\tRole created {}",role);
+		try {
+			privilegeService.addPrivilege(privilege);
+			logger.info("\tPrivilege created {}",USER_PRIVILEGE);
+			privilegeService.addPrivilege(privilege);			
+			assert (1==2); 
+		} catch  (PrivilegeExistsException e) {
+			assert(e.getLocalizedMessage().length()>0);
 		}
-		roles.add(role);		
-		privilege.setRoles(roles);
-		
-		privilegeService.addPrivilege(privilege);
 		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE).getName().equals(USER_PRIVILEGE));
-		logger.info("\tPrivilege created {}",privilege);
-		logger.info("OUT whenCreatePrivilege_thenSuccess()\n");
+		logger.info("OUT whenPrivilegeExceptionDupe_thenSuccess()\n");
 	};
 	
 }

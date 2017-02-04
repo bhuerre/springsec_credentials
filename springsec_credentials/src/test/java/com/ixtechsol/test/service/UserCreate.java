@@ -17,9 +17,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ixtechsol.sec.model.Privilege;
 import com.ixtechsol.sec.model.Role;
@@ -50,6 +52,8 @@ public class UserCreate {
 	IUserService userService;
 
 	@Test
+	@Transactional
+	@Rollback
 	public void whenCreateUser_thenSuccess() throws PrivilegeExistsException, RoleExistsException{
 		logger.info("\n");
 		logger.info("IN whenCreateUser_thenSuccess()");
@@ -64,13 +68,10 @@ public class UserCreate {
 		
 		User user = new User(USER_NAME,USER_EMAIL,USER_PASS,true);
 		user.setRoles(roles);
+		assert(userService.findUserByUsername(USER_NAME) == null);
 		userService.saveRegisteredUser(user);
+		assert(userService.findUserByUsername(USER_NAME).getUsername().equals(USER_NAME));
 		logger.info("\tUser {} created",user.getUsername());
-		if (userService.findUserByUsername(USER_NAME).getUsername()==user.getUsername()) {
-			logger.info("\tUser {} retrieved",user.getUsername());			
-		} else {
-			logger.error("\tUser {} not retrieved",user.getUsername());
-		};
 		logger.info("OUT whenCreateUser_thenSuccess()\n");
 	};	
 }

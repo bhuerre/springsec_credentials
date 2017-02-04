@@ -5,7 +5,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ixtechsol.sec.model.Role;
 import com.ixtechsol.sec.service.IRoleService;
@@ -22,6 +24,8 @@ public class RoleDelete {
 	IRoleService roleService;
 	
 	@Test
+	@Transactional
+	@Rollback
 	public void whenDeletingRole_thenSuccess() throws RoleExistsException{
 		logger.info("\n");
 		logger.info("IN whenDeletingRole_thenSuccess()");
@@ -31,7 +35,9 @@ public class RoleDelete {
 			roleService.registerNewRole(role);
 		}
 		logger.info("\tDelete role {}",role.getName());
+		assert(roleService.findRoleByName(USER_ROLE).getName().equals(USER_ROLE));
 		roleService.deleteRole(role);
+		assert(roleService.findRoleByName(USER_ROLE) == null);
 		logger.info("OUT whenDeletingRole_thenSuccess()");
 	};
 }

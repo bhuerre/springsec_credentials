@@ -17,9 +17,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ixtechsol.sec.model.Privilege;
 import com.ixtechsol.sec.model.Role;
@@ -46,6 +48,8 @@ public class PrivilegeDelete {
 	IPrivilegeService privilegeService;
 	
 	@Test
+	@Transactional
+	@Rollback
 	public void whenDeletingPrivilege_thenSuccess() throws RoleExistsException, PrivilegeExistsException, PrivilegeNotFoundException{
 		logger.info("\n");
 		logger.info("IN whenDeletingRole_thenSuccess()");
@@ -64,11 +68,12 @@ public class PrivilegeDelete {
 			privilege.setRoles(roles);
 			privilegeService.addPrivilege(privilege);
 			logger.info("\tPrivilege created {}",privilege);
+			privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
+			logger.info("Privilege confirmed created");
 		}
-		privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
-		logger.info("Privilege confirmed created");
-		
+		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE).getName().equals(USER_PRIVILEGE));
 		privilegeService.deletePrivilege(privilege.getId());
+		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE) == null);
 		logger.info("Delete privilege {}", privilege.getName());
 		roleService.deleteRole(role);
 		logger.info("\tDelete role {}",role.getName());
