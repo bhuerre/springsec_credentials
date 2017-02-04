@@ -31,7 +31,9 @@ public class RoleDelete {
 			roleService.registerNewRole(role);
 		}
 		logger.info("\tDelete role {}",role.getName());
+		assert(roleService.findRoleByName(USER_ROLE).getName().equals(USER_ROLE));
 		roleService.deleteRole(role);
+		assert(roleService.findRoleByName(USER_ROLE) == null);
 		logger.info("OUT whenDeletingRole_thenSuccess()");
 	};
 }

@@ -62,5 +62,10 @@ public class PrivilegeService implements IPrivilegeService {
 	public void deletePrivilege(long id) throws PrivilegeNotFoundException {
 		privilegeRepository.delete(id);
 	}
+	
+	@Override
+	public void deletePrivilege(Privilege privilege) throws PrivilegeNotFoundException {
+		privilegeRepository.delete(privilege);
+	}
 
 }

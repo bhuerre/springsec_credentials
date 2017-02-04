@@ -1,6 +1,8 @@
 package com.ixtechsol.test.service;
 
 
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -33,7 +35,9 @@ public class RoleCreate {
 		} 
 		Role role = new Role(); 
 		role.setName(USER_ROLE);
+		assert(roleService.findRoleByName(USER_ROLE) == null);
 		roleService.registerNewRole(role);
+		assert(roleService.findRoleByName(USER_ROLE).getName().equals(USER_ROLE));
 		logger.info("OUT whenCreateRole_thenSuccess()");
 	};
 }

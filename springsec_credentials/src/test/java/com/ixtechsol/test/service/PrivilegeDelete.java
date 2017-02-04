@@ -67,7 +67,9 @@ public class PrivilegeDelete {
 			privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
 			logger.info("Privilege confirmed created");
 		}
+		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE).getName().equals(USER_PRIVILEGE));
 		privilegeService.deletePrivilege(privilege.getId());
+		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE) == null);
 		logger.info("Delete privilege {}", privilege.getName());
 		roleService.deleteRole(role);
 		logger.info("\tDelete role {}",role.getName());

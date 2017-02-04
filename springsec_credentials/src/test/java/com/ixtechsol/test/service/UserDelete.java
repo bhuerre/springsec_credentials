@@ -78,7 +78,9 @@ public class UserDelete {
 		}
 		
 		user = userService.findUserByUsername(USER_NAME);
+		assert(userService.findUserByUsername(USER_NAME).getUsername().equals(USER_NAME));
 		userService.deleteUser(user);
+		assert(userService.findUserByUsername(USER_NAME) == null);
 		logger.info("\tUser {} deleted",USER_NAME);
 		if (roleService.findRoleByName(USER_ROLE) != null) {
 			roleService.deleteRole(roleService.findRoleByName(USER_ROLE));

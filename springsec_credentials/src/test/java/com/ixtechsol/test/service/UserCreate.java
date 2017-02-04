@@ -64,13 +64,10 @@ public class UserCreate {
 		
 		User user = new User(USER_NAME,USER_EMAIL,USER_PASS,true);
 		user.setRoles(roles);
+		assert(userService.findUserByUsername(USER_NAME) == null);
 		userService.saveRegisteredUser(user);
+		assert(userService.findUserByUsername(USER_NAME).getUsername().equals(USER_NAME));
 		logger.info("\tUser {} created",user.getUsername());
-		if (userService.findUserByUsername(USER_NAME).getUsername()==user.getUsername()) {
-			logger.info("\tUser {} retrieved",user.getUsername());			
-		} else {
-			logger.error("\tUser {} not retrieved",user.getUsername());
-		};
 		logger.info("OUT whenCreateUser_thenSuccess()\n");
 	};	
 }

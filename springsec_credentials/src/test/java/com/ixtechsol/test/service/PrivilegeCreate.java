@@ -28,6 +28,7 @@ import com.ixtechsol.sec.service.IRoleService;
 import com.ixtechsol.sec.service.RoleService;
 import com.ixtechsol.sec.spring.CustCredentialsApp;
 import com.ixtechsol.sec.validation.PrivilegeExistsException;
+import com.ixtechsol.sec.validation.PrivilegeNotFoundException;
 import com.ixtechsol.sec.validation.RoleExistsException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,8 +39,6 @@ public class PrivilegeCreate {
 	
 	private static final String USER_ROLE = "USER";
 	private static final String USER_PRIVILEGE = "CTRL_READ";
-//	private static final String USER_NAME ="Joe";
-//	private static final String USER_EMAIL = "bhuerre@aol.com";
 	     
 	@Autowired
 	IRoleService roleService;
@@ -48,9 +47,19 @@ public class PrivilegeCreate {
 	IPrivilegeService privilegeService;
 	
 	@Test
-	public void whenCreatePrivilege_thenSuccess() throws PrivilegeExistsException, RoleExistsException{
+	public void whenCreatePrivilege_thenSuccess() throws PrivilegeExistsException, RoleExistsException, PrivilegeNotFoundException{
 		logger.info("\n");
 		logger.info("IN whenCreatePrivilege_thenSuccess()");
+		
+		Privilege privilege = new Privilege();
+		privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
+		if (privilege != null) {
+			privilegeService.deletePrivilege(privilegeService.findPrivilegeByName(USER_PRIVILEGE));
+		};
+
+		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE) == null);
+		privilege = new Privilege(USER_PRIVILEGE);
+
 		Role role = roleService.findRoleByName(USER_ROLE);
 		Set<Role> roles = new HashSet<Role>();
 		if (role == null) {
@@ -58,17 +67,12 @@ public class PrivilegeCreate {
 			roleService.registerNewRole(role);
 			logger.info("\tRole created {}",role);
 		}
-		roles.add(role);
+		roles.add(role);		
+		privilege.setRoles(roles);
 		
-		Privilege privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
-		if (privilege == null) {
-			privilege = new Privilege(USER_PRIVILEGE);
-			privilege.setRoles(roles);
-			privilegeService.addPrivilege(privilege);
-			logger.info("\tPrivilege created {}",privilege);
-		}
-		privilege = privilegeService.findPrivilegeByName(USER_PRIVILEGE);
-		logger.info("Privilege confirmed created");
+		privilegeService.addPrivilege(privilege);
+		assert(privilegeService.findPrivilegeByName(USER_PRIVILEGE).getName().equals(USER_PRIVILEGE));
+		logger.info("\tPrivilege created {}",privilege);
 		logger.info("OUT whenCreatePrivilege_thenSuccess()\n");
 	};
 	
