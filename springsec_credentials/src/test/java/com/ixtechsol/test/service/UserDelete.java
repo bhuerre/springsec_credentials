@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -54,7 +55,8 @@ public class UserDelete {
 	IUserService userService;
 
 	@Test
-	//@Transactional
+	@Transactional
+	@Rollback
 	public void whenDeleteUser_thenSuccess() throws PrivilegeExistsException, RoleExistsException{
 		logger.info("\n");
 		logger.info("IN whenDeleteeUser_thenSuccess()");

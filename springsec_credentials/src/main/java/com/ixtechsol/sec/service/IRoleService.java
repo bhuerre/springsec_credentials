@@ -17,7 +17,7 @@ public interface IRoleService {
 	
 	Iterable<Role> findAll();
 
-	void updateRole(Role role) throws RoleExistsException,RoleNotFoundException;
+	void updateRole(Role role) throws RoleNotFoundException;
 	
 	void deleteRole(Role role);
 

@@ -19,8 +19,8 @@ import com.ixtechsol.sec.validation.RoleNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextDefinition
-public class RoleCreate {
-	Logger logger = LoggerFactory.getLogger(RoleCreate.class);
+public class RoleExceptionDupe {
+	Logger logger = LoggerFactory.getLogger(RoleExceptionDupe.class);
 	
 	private static final String USER_ROLE = "USER";
     
@@ -30,18 +30,21 @@ public class RoleCreate {
 	@Test
 	@Transactional
 	@Rollback
-	public void whenCreateRole_thenSuccess() throws RoleExistsException,RoleNotFoundException{
+	public void whenRoleExceptionDupe_thenSuccess() throws RoleExistsException,RoleNotFoundException{
 		logger.info("\n");
-		logger.info("IN whenCreateRole_thenSuccess()");
-		if (roleService.findRoleByName(USER_ROLE) != null ) {
-			roleService.deleteRole(roleService.findRoleByName(USER_ROLE));
-			logger.info("\tDelete role {}",USER_ROLE);
-		} 
-		Role role = new Role(); 
-		role.setName(USER_ROLE);
-		assert(roleService.findRoleByName(USER_ROLE) == null);
-		roleService.registerNewRole(role);
-		assert(roleService.findRoleByName(USER_ROLE).getName().equals(USER_ROLE));
-		logger.info("OUT whenCreateRole_thenSuccess()");
+		logger.info("IN whenRoleExceptionDupe_thenSuccess()");
+		Role role = new Role();
+		try {
+			role.setName(USER_ROLE);
+			roleService.registerNewRole(role);
+			logger.info("\tAdding first occuren for role = {}",USER_ROLE);
+			roleService.registerNewRole(role);
+			//Executing Line bellow would mean a fail
+			assert(1==2);
+		} catch (RoleExistsException e) {
+			logger.info("\tERROR while adding 2nd occurence for role = {}",USER_ROLE);
+			assert(e.getLocalizedMessage().length()>0);
+		}
+		logger.info("OUT whenRoleExceptionDupe_thenSuccess()");
 	};
 }
