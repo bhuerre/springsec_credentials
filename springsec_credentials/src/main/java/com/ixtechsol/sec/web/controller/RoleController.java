@@ -159,16 +159,8 @@ public class RoleController {
                         new Object[] {businessObject, role.getName()}, Locale.US);
                 redirect.addFlashAttribute("error", message);
                 return "redirect:/role/list";
-            } catch (RoleExistsException dse) {
-                String message = messageSource.getMessage("ctrl.message.error.duplicate", 
-                        new Object[] {businessObject, role.getName()}, Locale.US);
-                redirect.addFlashAttribute("error", message);
-                return "redirect:/role/list";
-            }
+            } 
         }
         return "redirect:/role/list";
-    }
-	
-	
-	
+    }	
 }

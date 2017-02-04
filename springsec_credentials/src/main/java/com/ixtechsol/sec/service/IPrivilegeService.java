@@ -23,5 +23,7 @@ public interface IPrivilegeService {
 
 	void deletePrivilege(long id) throws PrivilegeNotFoundException;
 
+	void deletePrivilege(Privilege privilege) throws PrivilegeNotFoundException;
+
 
 }
